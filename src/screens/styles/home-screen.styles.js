@@ -4,7 +4,7 @@ import { COLORS, FONTFAMILY, FONTSIZE, SPACING } from "../../theme/theme";
 export const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
-    backgroundColor: COLORS.primaryBlackHex,
+    backgroundColor: "white",
     padding: SPACING.space_24,
   },
   ScrollViewFlex: {
