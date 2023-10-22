@@ -13,6 +13,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { COLORS, FONTSIZE } from "../theme/theme";
 import CustomIcon from "../components/custom-icon";
 import CoffeeData from "../data/CoffeeData";
+import { useStore } from "../store/store";
 
 const getCategoriesFromData = (data) => {
   let temp = {};
@@ -29,6 +30,7 @@ const getCategoriesFromData = (data) => {
 };
 
 const HomeScreen = () => {
+  const coffeeList = useStore((state) => state.CoffeeList);
   const [categories, setCategories] = useState(
     getCategoriesFromData(CoffeeData)
   );
