@@ -1,11 +1,16 @@
 import { StyleSheet } from "react-native";
-import { COLORS, FONTFAMILY, FONTSIZE, SPACING } from "../../theme/theme";
+import {
+  BORDERRADIUS,
+  COLORS,
+  FONTFAMILY,
+  FONTSIZE,
+  SPACING,
+} from "../../theme/theme";
 
 export const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
-    backgroundColor: "white",
-    padding: SPACING.space_24,
+    backgroundColor: COLORS.primaryBlackHex,
   },
   ScrollViewFlex: {
     flexGrow: 1,
@@ -14,7 +19,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingBottom: SPACING.space_24,
+    padding: SPACING.space_24,
   },
   Image: {
     height: SPACING.space_36,
@@ -43,12 +48,14 @@ export const styles = StyleSheet.create({
     color: COLORS.primaryWhiteHex,
     fontSize: FONTSIZE.size_28,
     fontFamily: FONTFAMILY.poppins_semibold,
+    paddingHorizontal: SPACING.space_24,
   },
   InputContainer: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: COLORS.primaryDarkGreyHex,
     borderRadius: SPACING.space_16,
+    marginHorizontal: SPACING.space_24,
     marginVertical: 30,
   },
   InputIcon: {
@@ -61,6 +68,7 @@ export const styles = StyleSheet.create({
     fontSize: FONTSIZE.size_14,
   },
   CategoryScrollViewStyle: {
+    paddingHorizontal: SPACING.space_20,
     marginBottom: 20,
   },
   CategoryScrollViewContainer: {
@@ -74,5 +82,23 @@ export const styles = StyleSheet.create({
     fontSize: FONTSIZE.size_16,
     color: COLORS.primaryLightGreyHex,
     marginBottom: SPACING.space_4,
+  },
+  ActiveCategory: {
+    height: SPACING.space_10,
+    width: SPACING.space_10,
+    borderRadius: BORDERRADIUS.radius_10,
+    backgroundColor: COLORS.primaryOrangeHex,
+  },
+  FlatListContainer: {
+    gap: SPACING.space_20,
+    paddingVertical: SPACING.space_20,
+    paddingHorizontal: SPACING.space_30,
+  },
+  CoffeeBeansTitle: {
+    fontSize: FONTSIZE.size_18,
+    marginLeft: SPACING.space_30,
+    marginTop: SPACING.space_20,
+    fontFamily: FONTFAMILY.poppins_medium,
+    color: COLORS.secondaryLightGreyHex,
   },
 });

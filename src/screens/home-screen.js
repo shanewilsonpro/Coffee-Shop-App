@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   Image,
   View,
+  FlatList,
 } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
 import { styles } from "./styles/home-screen.styles";
 import LinearGradient from "react-native-linear-gradient";
 import { COLORS, FONTSIZE } from "../theme/theme";
 import CustomIcon from "../components/custom-icon";
 import CoffeeData from "../data/CoffeeData";
 import { useStore } from "../store/store";
+import CoffeeCard from "../components/coffee-card";
 
 const getCategoriesFromData = (data) => {
   let temp = {};
@@ -29,11 +33,31 @@ const getCategoriesFromData = (data) => {
   return categories;
 };
 
+const getCoffeeList = (category, data) => {
+  if (category == "All") {
+    return data;
+  } else {
+    let coffeelist = data.filter((item) => item.name == category);
+    return coffeelist;
+  }
+};
+
 const HomeScreen = () => {
   const coffeeList = useStore((state) => state.CoffeeList);
+  const beanList = useStore((state) => state.BeanList);
   const [categories, setCategories] = useState(
     getCategoriesFromData(CoffeeData)
   );
+  const [searchText, setSearchText] = useState(undefined);
+  const [categoryIndex, setCategoryIndex] = useState({
+    index: 0,
+    category: categories[0],
+  });
+  const [sortedCoffee, setSortedCoffee] = useState(
+    getCoffeeList(categoryIndex.category, coffeeList)
+  );
+
+  const tabBarHeight = useBottomTabBarHeight();
 
   return (
     <View style={styles.ScreenContainer}>
@@ -81,8 +105,8 @@ const HomeScreen = () => {
           </TouchableOpacity>
           <TextInput
             placeholder="Find Your Coffee..."
-            value={""}
-            onChangeText={(text) => {}}
+            value={searchText}
+            onChangeText={(text) => setSearchText(text)}
             placeholderTextColor={COLORS.primaryLightGreyHex}
             style={styles.TextInputContainer}
           />
@@ -101,13 +125,110 @@ const HomeScreen = () => {
             >
               <TouchableOpacity
                 style={styles.CategoryScrollViewItem}
-                onPress={() => {}}
+                onPress={() => {
+                  setCategoryIndex({
+                    index: index,
+                    category: categories[index],
+                  });
+                  setSortedCoffee([
+                    ...getCoffeeList(categories[index], coffeeList),
+                  ]);
+                }}
               >
-                <Text style={[styles.CategoryText]}>{category}</Text>
+                <Text
+                  style={[
+                    styles.CategoryText,
+                    categoryIndex.index == index
+                      ? { color: COLORS.primaryOrangeHex }
+                      : {},
+                  ]}
+                >
+                  {category}
+                </Text>
+                {categoryIndex.index == index ? (
+                  <View style={styles.ActiveCategory} />
+                ) : (
+                  <></>
+                )}
               </TouchableOpacity>
             </View>
           ))}
         </ScrollView>
+
+        {/* COFFEE FLATLIST */}
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={sortedCoffee}
+          contentContainerStyle={styles.FlatListContainer}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push("Details", {
+                    index: item.index,
+                    id: item.id,
+                    type: item.type,
+                  });
+                }}
+              >
+                <CoffeeCard
+                  id={item.id}
+                  index={item.index}
+                  type={item.type}
+                  roasted={item.roasted}
+                  imagelink_square={item.imagelink_square}
+                  name={item.name}
+                  special_ingredient={item.special_ingredient}
+                  average_rating={item.average_rating}
+                  price={item.prices[2]}
+                  //   buttonPressHandler={CoffeCardAddToCart}
+                />
+              </TouchableOpacity>
+            );
+          }}
+        />
+
+        <Text style={styles.CoffeeBeansTitle}>Coffee Beans</Text>
+
+        {/* BEANS FLATLIST */}
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={beanList}
+          contentContainerStyle={[
+            styles.FlatListContainer,
+            { marginBottom: tabBarHeight },
+          ]}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push("Details", {
+                    index: item.index,
+                    id: item.id,
+                    type: item.type,
+                  });
+                }}
+              >
+                <CoffeeCard
+                  id={item.id}
+                  index={item.index}
+                  type={item.type}
+                  roasted={item.roasted}
+                  imagelink_square={item.imagelink_square}
+                  name={item.name}
+                  special_ingredient={item.special_ingredient}
+                  average_rating={item.average_rating}
+                  price={item.prices[2]}
+                  //   buttonPressHandler={CoffeCardAddToCart}
+                />
+              </TouchableOpacity>
+            );
+          }}
+        />
       </ScrollView>
     </View>
   );
