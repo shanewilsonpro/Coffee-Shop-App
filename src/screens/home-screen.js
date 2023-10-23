@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   ScrollView,
   StatusBar,
@@ -42,13 +42,13 @@ const getCoffeeList = (category, data) => {
   }
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const coffeeList = useStore((state) => state.CoffeeList);
   const beanList = useStore((state) => state.BeanList);
   const [categories, setCategories] = useState(
     getCategoriesFromData(CoffeeData)
   );
-  const [searchText, setSearchText] = useState(undefined);
+  const [searchText, setSearchText] = useState("");
   const [categoryIndex, setCategoryIndex] = useState({
     index: 0,
     category: categories[0],
@@ -56,8 +56,34 @@ const HomeScreen = () => {
   const [sortedCoffee, setSortedCoffee] = useState(
     getCoffeeList(categoryIndex.category, coffeeList)
   );
+  const listRef = useRef();
 
   const tabBarHeight = useBottomTabBarHeight();
+
+  const searchCoffee = (search) => {
+    if (search != "") {
+      listRef?.current?.scrollToOffset({
+        animated: true,
+        offset: 0,
+      });
+      setCategoryIndex({ index: 0, category: categories[0] });
+      setSortedCoffee([
+        ...coffeeList.filter((item) =>
+          item.name.toLowerCase().includes(search.toLowerCase())
+        ),
+      ]);
+    }
+  };
+
+  const resetSearchCoffee = () => {
+    listRef?.current?.scrollToOffset({
+      animated: true,
+      offset: 0,
+    });
+    setCategoryIndex({ index: 0, category: categories[0] });
+    setSortedCoffee([...coffeeList]);
+    setSearchText("");
+  };
 
   return (
     <View style={styles.ScreenContainer}>
@@ -95,7 +121,11 @@ const HomeScreen = () => {
 
         {/* SEARCH INPUT */}
         <View style={styles.InputContainer}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              searchCoffee(searchText);
+            }}
+          >
             <CustomIcon
               style={styles.InputIcon}
               name="search"
@@ -106,10 +136,25 @@ const HomeScreen = () => {
           <TextInput
             placeholder="Find Your Coffee..."
             value={searchText}
-            onChangeText={(text) => setSearchText(text)}
+            onChangeText={(text) => {
+              searchCoffee(text);
+              setSearchText(text);
+            }}
             placeholderTextColor={COLORS.primaryLightGreyHex}
             style={styles.TextInputContainer}
           />
+          {searchText.length > 0 ? (
+            <TouchableOpacity onPress={resetSearchCoffee}>
+              <CustomIcon
+                style={styles.InputIcon}
+                name="close"
+                size={FONTSIZE.size_16}
+                color={COLORS.primaryLightGreyHex}
+              />
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
         </View>
 
         {/* CATEGORY HORIZONTAL SCROLLER */}
@@ -126,6 +171,10 @@ const HomeScreen = () => {
               <TouchableOpacity
                 style={styles.CategoryScrollViewItem}
                 onPress={() => {
+                  listRef?.current?.scrollToOffset({
+                    animated: true,
+                    offset: 0,
+                  });
                   setCategoryIndex({
                     index: index,
                     category: categories[index],
@@ -157,7 +206,13 @@ const HomeScreen = () => {
 
         {/* COFFEE FLATLIST */}
         <FlatList
+          ref={listRef}
           horizontal
+          ListEmptyComponent={
+            <View style={styles.EmptyListContainer}>
+              <Text style={styles.CategoryText}>No Coffee Available</Text>
+            </View>
+          }
           showsHorizontalScrollIndicator={false}
           data={sortedCoffee}
           contentContainerStyle={styles.FlatListContainer}

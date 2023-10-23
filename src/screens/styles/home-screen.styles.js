@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import {
   BORDERRADIUS,
   COLORS,
@@ -59,13 +59,14 @@ export const styles = StyleSheet.create({
     marginVertical: 30,
   },
   InputIcon: {
-    marginHorizontal: 20,
+    marginHorizontal: SPACING.space_20,
   },
   TextInputContainer: {
     flex: 1,
     height: 60,
     fontFamily: FONTFAMILY.poppins_medium,
     fontSize: FONTSIZE.size_14,
+    color: COLORS.primaryWhiteHex,
   },
   CategoryScrollViewStyle: {
     paddingHorizontal: SPACING.space_20,
@@ -100,5 +101,11 @@ export const styles = StyleSheet.create({
     marginTop: SPACING.space_20,
     fontFamily: FONTFAMILY.poppins_medium,
     color: COLORS.secondaryLightGreyHex,
+  },
+  EmptyListContainer: {
+    width: Dimensions.get("window").width - SPACING.space_30 * 2,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: SPACING.space_36 * 3.2,
   },
 });
