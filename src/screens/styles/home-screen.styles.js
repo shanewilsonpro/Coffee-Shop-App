@@ -21,20 +21,6 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: SPACING.space_24,
   },
-  Image: {
-    height: SPACING.space_36,
-    width: SPACING.space_36,
-  },
-  ImageContainer: {
-    width: 36,
-    height: 36,
-    borderWidth: 2,
-    borderRadius: 12,
-    borderColor: COLORS.primaryGreyHex,
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "hidden",
-  },
   LinearGradientBG: {
     width: 36,
     height: 36,

@@ -18,6 +18,7 @@ import CustomIcon from "../components/custom-icon";
 import CoffeeData from "../data/CoffeeData";
 import { useStore } from "../store/store";
 import CoffeeCard from "../components/coffee-card";
+import HeaderBar from "../components/header-bar";
 
 const getCategoriesFromData = (data) => {
   let temp = {};
@@ -92,27 +93,7 @@ const HomeScreen = ({ navigation }) => {
         contentContainerStyle={styles.ScrollViewFlex}
       >
         {/* HEADER BAR */}
-        <View style={styles.HeaderBar}>
-          <LinearGradient
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}
-            style={styles.LinearGradientBG}
-          >
-            <CustomIcon
-              name={"menu"}
-              color={COLORS.primaryLightGreyHex}
-              size={FONTSIZE.size_16}
-            />
-          </LinearGradient>
-
-          <View style={styles.ImageContainer}>
-            <Image
-              source={require("../assets/app_images/avatar.png")}
-              style={styles.Image}
-            />
-          </View>
-        </View>
+       <HeaderBar />
 
         {/* SCREEN TITLE */}
         <Text style={styles.ScreenTitle}>
